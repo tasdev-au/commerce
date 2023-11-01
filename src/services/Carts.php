@@ -42,20 +42,6 @@ class Carts extends Component
     protected string $cartName = 'commerce_cart';
 
     /**
-     * @var array The configuration of the cart cookie.
-     * @since 4.0.0
-     * @see setSessionCartNumber()
-     */
-    public array $cartCookie = [];
-
-    /**
-     * @var int The expiration duration of the cart cookie, in seconds. (Defaults to one year.)
-     * @since 4.0.0
-     * @see setSessionCartNumber()
-     */
-    public int $cartCookieDuration = 31536000;
-
-    /**
      * @var Order|null
      */
     private ?Order $_cart = null;
@@ -66,39 +52,6 @@ class Carts extends Component
      * @var int The number of times the cart was requested.
      */
     private int $_getCartCount = 0;
-
-    /**
-     * Initializes the cart service
-     *
-     * @return void
-     * @throws MissingComponentException
-     */
-    public function init()
-    {
-        parent::init();
-
-        // Complete the cart cookie config
-        if (!isset($this->cartCookie['name'])) {
-            $this->cartCookie['name'] = md5(sprintf('Craft.%s.%s', self::class, Craft::$app->id)) . '_commerce_cart';
-        }
-
-        $request = Craft::$app->getRequest();
-        if (!$request->getIsConsoleRequest()) {
-            $this->cartCookie = Craft::cookieConfig($this->cartCookie);
-
-            $session = Craft::$app->getSession();
-            $requestCookies = $request->getCookies();
-
-            // If we have a cart cookie, assign it to the cart number.
-            // Also check pre Commerce 4.0 for a cart number in the session just in case.
-            if ($requestCookies->has($this->cartCookie['name'])) {
-                $this->setSessionCartNumber($requestCookies->getValue($this->cartCookie['name']));
-            } elseif (($session->getHasSessionId() || $session->getIsActive()) && $session->has('commerce_cart')) {
-                $this->setSessionCartNumber($session->get('commerce_cart'));
-                $session->remove('commerce_cart');
-            }
-        }
-    }
 
     /**
      * Get the current cart for this session.
