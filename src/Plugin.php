@@ -367,6 +367,11 @@ class Plugin extends BasePlugin
         return $ret;
     }
 
+    public function getVersion()
+    {
+        return '4.3.1';
+    }
+
 
     /**
      * @inheritdoc
