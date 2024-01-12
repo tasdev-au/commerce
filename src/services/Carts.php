@@ -182,7 +182,7 @@ class Carts extends Component
     {
         $edge = new DateTime();
         $activeCartDuration = ConfigHelper::durationInSeconds(Plugin::getInstance()->getSettings()->activeCartDuration);
-        $interval = DateTimeHelper::secondsToInterval($activeCartDuration);
+        $interval = DateTimeHelper::toDateInterval($activeCartDuration);
         $edge->sub($interval);
         return $edge->format(DateTime::ATOM);
     }

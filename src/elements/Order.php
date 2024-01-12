@@ -88,7 +88,6 @@ use yii\log\Logger;
  * @property string $recalculationMode the mode of recalculation.
  * @property string $origin
  * @property int|null $customerId The order customer ID
- * @property-read ShippingMethod[] $availableShippingMethods
  * @property-read bool $activeCart Is the current order the same as the active cart
  * @property-read User|null $customer
  * @property-read Gateway $gateway
@@ -149,7 +148,7 @@ use yii\log\Logger;
  * @property float $totalTaxIncluded
  * @property float $totalTax
  * @property float $totalShippingCost
- * @property ShippingMethodOption[] $availableShippingMethodOptions
+ * @property-read ShippingMethodOption[] $availableShippingMethodOptions
  * @property-read float|int $totalAuthorized
  * @property float $paymentAmount
  * @property-read null|string $loadCartUrl
@@ -2458,7 +2457,7 @@ class Order extends Element
     public function getOrderStatusHtml(): string
     {
         if ($status = $this->getOrderStatus()) {
-            return '<span class="commerceStatusLabel"><span class="status ' . $status->color . '"></span> ' . $status->name . '</span>';
+            return '<span class="commerceStatusLabel nowrap"><span class="status ' . $status->color . '"></span>' . $status->name . '</span>';
         }
 
         return '';
@@ -2470,10 +2469,10 @@ class Order extends Element
     public function getPaidStatusHtml(): string
     {
         return match ($this->getPaidStatus()) {
-            self::PAID_STATUS_OVERPAID => '<span class="commerceStatusLabel"><span class="status blue"></span> ' . Craft::t('commerce', 'Overpaid') . '</span>',
-            self::PAID_STATUS_PAID => '<span class="commerceStatusLabel"><span class="status green"></span> ' . Craft::t('commerce', 'Paid') . '</span>',
-            self::PAID_STATUS_PARTIAL => '<span class="commerceStatusLabel"><span class="status orange"></span> ' . Craft::t('commerce', 'Partial') . '</span>',
-            self::PAID_STATUS_UNPAID => '<span class="commerceStatusLabel"><span class="status red"></span> ' . Craft::t('commerce', 'Unpaid') . '</span>',
+            self::PAID_STATUS_OVERPAID => '<span class="commerceStatusLabel nowrap"><span class="status blue"></span>' . Craft::t('commerce', 'Overpaid') . '</span>',
+            self::PAID_STATUS_PAID => '<span class="commerceStatusLabel nowrap"><span class="status green"></span>' . Craft::t('commerce', 'Paid') . '</span>',
+            self::PAID_STATUS_PARTIAL => '<span class="commerceStatusLabel nowrap"><span class="status orange"></span>' . Craft::t('commerce', 'Partial') . '</span>',
+            self::PAID_STATUS_UNPAID => '<span class="commerceStatusLabel nowrap"><span class="status red"></span>' . Craft::t('commerce', 'Unpaid') . '</span>',
             default => '',
         };
     }
@@ -2888,7 +2887,11 @@ class Order extends Element
     {
         if (!isset($this->_shippingAddress) && $this->shippingAddressId) {
             /** @var AddressElement|null $address */
-            $address = AddressElement::find()->ownerId($this->id)->id($this->shippingAddressId)->one();
+            $address = AddressElement::find()
+                ->owner($this)
+                ->id($this->shippingAddressId)
+                ->one();
+
             $this->_shippingAddress = $address;
         }
 
@@ -2923,7 +2926,7 @@ class Order extends Element
 
         // Ensure that address can only belong to this order
         if ($address->ownerId != $this->id) {
-            throw new InvalidArgumentException('Can not set a shipping address on the order that is is not owned by the order.');
+            throw new InvalidArgumentException('Can not set a shipping address on the order that is not owned by the order.');
         }
 
         $this->shippingAddressId = $address->id;
@@ -2982,7 +2985,11 @@ class Order extends Element
     {
         if (!isset($this->_billingAddress) && $this->billingAddressId) {
             /** @var AddressElement|null $address */
-            $address = AddressElement::find()->ownerId($this->id)->id($this->billingAddressId)->one();
+            $address = AddressElement::find()
+                ->owner($this)
+                ->id($this->billingAddressId)
+                ->one();
+
             $this->_billingAddress = $address;
         }
 
@@ -3017,7 +3024,7 @@ class Order extends Element
 
         // Ensure that address can only belong to this order
         if ($address->ownerId !== $this->id) {
-            throw new InvalidArgumentException('Can not set a billing address on the order that is is not owned by the order.');
+            throw new InvalidArgumentException('Can not set a billing address on the order that is not owned by the order.');
         }
 
         $address->ownerId = $this->id;
