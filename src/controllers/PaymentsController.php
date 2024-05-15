@@ -81,6 +81,31 @@ class PaymentsController extends BaseFrontEndController
 
         $number = $this->request->getParam('number');
 
+        $useMutex = $number || (!$isCpRequest && $plugin->getCarts()->getHasSessionCartNumber());
+
+        if ($useMutex) {
+            $lockOrderNumber = null;
+            if ($number) {
+                $lockOrderNumber = $number;
+            } elseif (!$isCpRequest) {
+                $session = Craft::$app->getSession();
+                $cartName = $plugin->getCarts()->getCartName();
+
+                if ($session->has($cartName)) {
+                    $lockOrderNumber = $session->get($cartName);
+                }
+            }
+
+            if ($lockOrderNumber) {
+                $lockName = "order:$lockOrderNumber";
+                $mutex = Craft::$app->getMutex();
+                if (!$mutex->acquire($lockName, 5)) {
+                    throw new Exception('Unable to acquire a lock for saving of Order: ' . $lockOrderNumber);
+                }
+            }
+        }
+
+
         if ($number !== null) {
             $order = $plugin->getOrders()->getOrderByNumber($number);
 
@@ -375,6 +400,10 @@ class PaymentsController extends BaseFrontEndController
 
                 $error = Craft::t('commerce', 'Something changed with the order before payment, please review your order and submit payment again.');
 
+                if ($useMutex && isset($mutex, $lockName)) {
+                    $mutex->release($lockName);
+                }
+
                 return $this->asModelFailure(
                     $paymentForm,
                     $error,
@@ -388,6 +417,10 @@ class PaymentsController extends BaseFrontEndController
                     ]
                 );
             }
+        }
+
+        if ($useMutex && isset($mutex, $lockName)) {
+            $mutex->release($lockName);
         }
 
         $redirect = '';

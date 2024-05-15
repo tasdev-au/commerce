@@ -1,5 +1,56 @@
 # Release Notes for Craft Commerce
 
+## 4.6.0 - 2024-04-30
+
+- Craft Commerce now requires Craft CMS 4.9 or later.
+- Improved transaction query performance. ([#3464](https://github.com/craftcms/commerce/issues/3464))
+- Fixed a bug where the bulk Delete action on the Shipping Methods index wasn’t working. ([#3444](https://github.com/craftcms/commerce/issues/3444))
+
+## 4.5.4 - 2024-04-24
+
+- Fixed a bug where date ranges weren’t displayed correctly on the Discounts index page. ([#3457](https://github.com/craftcms/commerce/issues/3457))
+- Fixed a bug where guest carts weren’t getting assigned to users after login. ([#3445](https://github.com/craftcms/commerce/issues/3445))
+
+## 4.5.3 - 2024-04-02
+
+- The “Postcode Condition Formula” condition rule now allows multi-line input. ([#3147](https://github.com/craftcms/commerce/issues/3147)
+- Fixed a bug where order adjustments could be duplicated. ([#3438](https://github.com/craftcms/commerce/issues/3438))
+- Fixed a bug where successful refunds could show a failure notice.
+
+## 4.5.2 - 2024-03-06
+
+- Fixed a bug where order status sources weren’t showing count badges on the Orders index page. ([#3397](https://github.com/craftcms/commerce/issues/3397))
+- Fixed a bug where discounts weren’t listing more than 128 related purchasables or categories. ([#3379](https://github.com/craftcms/commerce/issues/3379))
+
+## 4.5.1.1 - 2024-03-01
+
+- Fixed a bug where the “Share cart” order index action wasn’t working.
+- Fixed a bug where editing an adjustment’s amount could cause the adjustment to lose data on the Edit Order page. ([#3392](https://github.com/craftcms/commerce/issues/3392))
+
+## 4.5.1 - 2024-02-29
+
+- Fixed a SQL error that could occur when updating to Commerce 4 on MySQL. ([#3388](https://github.com/craftcms/commerce/pull/3388))
+- Fixed a bug where `craft\commerce\services\Carts::getHasSessionCartNumber()` wasn’t checking the cart cookie. ([#3353](https://github.com/craftcms/commerce/issues/3353))
+- Fixed a bug where it wasn’t possible to submit a blank variant title on the Edit Product page. ([#3384](https://github.com/craftcms/commerce/issues/3384))
+
+## 4.5.0 - 2024-02-26
+
+- Removed the Lite edition.
+- Deprecated `craft\commerce\models\ShippingMethod::isLite`.
+- Deprecated `craft\commerce\models\ShippingRule::isLite`.
+- Deprecated `craft\commerce\models\TaxRate::isLite`.
+- Deprecated `craft\commerce\models\LiteShippingSettings`.
+- Deprecated `craft\commerce\models\LiteTaxSettings`.
+- Deprecated `craft\commerce\controllers\LiteShippingController`.
+- Deprecated `craft\commerce\controllers\LiteTaxController`.
+- Deprecated `craft\commerce\services\ShippingMethods::getLiteShippingMethod()`. `getAllShippingMethods()` should be used instead.
+- Deprecated `craft\commerce\services\ShippingMethods::saveLiteShippingMethod()`. `saveShippingMethod()` should be used instead.
+- Deprecated `craft\commerce\services\ShippingRules::getLiteShippingRule()`. `getAllShippingRules()` should be used instead.
+- Deprecated `craft\commerce\services\ShippingRules::saveLiteShippingRule()`. `saveShippingRule()` should be used instead.
+- Deprecated `craft\commerce\services\TaxRates::getLiteTaxRate()`. `getAllTaxRates()` should be used instead.
+- Deprecated `craft\commerce\services\TaxRates::saveLiteTaxRate()`. `saveTaxRate()` should be used instead.
+- Fixed a SQL error that occurred when running the `commerce/upgrade` command on PostgreSQL. ([#3380](https://github.com/craftcms/commerce/pull/3380))
+
 ## 4.4.1.1 - 2024-01-12
 
 - Fixed a PHP error that occurred when saving a sale. ([#3364](https://github.com/craftcms/commerce/issues/3364))
@@ -25,7 +76,7 @@
 - Improved the performance of variant queries’ `hasProduct` and `hasVariant` params. ([#3325](https://github.com/craftcms/commerce/pull/3325))
 - Order statuses with long names no longer wrap on the Orders index page. ([#3335](https://github.com/craftcms/commerce/issues/3335))
 - Fixed a bug where carts could get duplicate validation errors. ([3334](https://github.com/craftcms/commerce/issues/3334))
-- Fixed a bug where tab selection was inconsistent on Edit Order pages. 
+- Fixed a bug where tab selection was inconsistent on Edit Order pages.
 - Fixed a bug where sales weren’t respecting elements’ site statuses. ([#3328](https://github.com/craftcms/commerce/issues/3328))
 - Fixed a bug where soft-deleted order statuses and line item statuses weren’t getting restored when applying project config changes. ([#3164](https://github.com/craftcms/commerce/issues/3164))
 - Fixed a bug where carts weren’t getting restored after signing in.
@@ -98,7 +149,7 @@
 
 ## 4.2.11 - 2023-06-05
 
-- Fixed a bug where “Send Email” option text wasn’t getting translated. ([#3172](https://github.com/craftcms/commerce/issues/3172)) 
+- Fixed a bug where “Send Email” option text wasn’t getting translated. ([#3172](https://github.com/craftcms/commerce/issues/3172))
 - Fixed a bug where discounts’ user condition values weren’t getting migrated properly when upgrading to Commerce 4. ([#3176](https://github.com/craftcms/commerce/issues/3176))
 
 ## 4.2.10 - 2023-05-31
@@ -156,7 +207,7 @@
 - Fixed a PHP error that occurred if `null` was passed to `craft\commerce\services\Discounts::getDiscountByCode()`. ([#3045](https://github.com/craftcms/commerce/issues/3045))
 - Fixed a bug where a large number of shipping rule category queries could be executed.
 - Fixed a PHP error that occurred if a product was re-saved before it had finished propagating to all sites. ([#1954](https://github.com/craftcms/commerce/issues/1954))
-- Fixed a PHP error that occurred if `craft\commerce\services\ProductTypes::getEditableProductTypes()` was called when no user was logged in. 
+- Fixed a PHP error that occurred if `craft\commerce\services\ProductTypes::getEditableProductTypes()` was called when no user was logged in.
 - Fixed a PHP error that occurred when saving an invalid shipping method.
 - Fixed a bug where gateways’ “Enabled for customers to select during checkout” setting wasn’t properly supporting environment variables. ([#3052](https://github.com/craftcms/commerce/issues/3052))
 - Fixed a PHP error that could occur when entering values on an Edit Discount page. ([#3067](https://github.com/craftcms/commerce/issues/3067))
@@ -294,7 +345,7 @@
 - Fixed a SQL error that occurred when restoring a soft-deleted product. ([#2982](https://github.com/craftcms/commerce/issues/2982))
 - Fixed a bug where the Edit Product page wasn’t handling site selection changes properly. ([#2971](https://github.com/craftcms/commerce/issues/2971))
 - Fixed a bug where it wasn't possible to add variants to a sale from the Edit Product page. ([#2976](https://github.com/craftcms/commerce/issues/2976))
-- Fixed a bug where primary addresses weren’t being automatically set on the Edit Order page. ([#2963](https://github.com/craftcms/commerce/issues/2963)) 
+- Fixed a bug where primary addresses weren’t being automatically set on the Edit Order page. ([#2963](https://github.com/craftcms/commerce/issues/2963))
 - Fixed a bug where it wasn’t possible to change the default order status. ([#2915](https://github.com/craftcms/commerce/issues/2915))
 
 ## 4.1.2 - 2022-09-15
@@ -314,7 +365,7 @@
 - Fixed a bug where Edit Subscription pages were blank. ([#2913](https://github.com/craftcms/commerce/issues/2913))
 - Fixed a bug where `craft\commerce\elements\Order::hasMatchingAddresses()` wasn’t checking the `fullName` property. ([#2917](https://github.com/craftcms/commerce/issues/2917))
 - Fixed a bug where discounts’ Purchase Total values weren’t getting saved.
-- Fixed a bug where discounts’ shipping address conditions were being saved as billing address conditions. ([#2938](https://github.com/craftcms/commerce/issues/2938)) 
+- Fixed a bug where discounts’ shipping address conditions were being saved as billing address conditions. ([#2938](https://github.com/craftcms/commerce/issues/2938))
 - Fixed an error that occurred when exporting orders using the “Expanded” export type. ([#2953](https://github.com/craftcms/commerce/issues/2953))
 - Fixed a bug where it wasn’t possible to clear out variants’ min and max quantities. ([#2954](https://github.com/craftcms/commerce/issues/2954))
 

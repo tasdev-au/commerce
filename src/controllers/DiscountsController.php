@@ -59,10 +59,6 @@ class DiscountsController extends BaseCpController
     {
         parent::init();
 
-        if (Plugin::getInstance()->is(Plugin::EDITION_PRO, '<')) {
-            throw new ForbiddenHttpException('Managing discounts is not permitted on the Lite edition.');
-        }
-
         $this->requirePermission('commerce-managePromotions');
     }
 
@@ -135,11 +131,12 @@ class DiscountsController extends BaseCpController
         $result = $sqlQuery->all();
 
         $tableData = [];
-        $dateFormat = Craft::$app->getFormattingLocale()->getDateTimeFormat('short');
+        $dateFormat = Craft::$app->getFormattingLocale()->getDateTimeFormat('short', Locale::FORMAT_PHP);
         foreach ($result as $item) {
             $dateFrom = $item['dateFrom'] ? DateTimeHelper::toDateTime($item['dateFrom']) : null;
             $dateTo = $item['dateTo'] ? DateTimeHelper::toDateTime($item['dateTo']) : null;
-            $dateRange = ($dateFrom ? $dateFrom->format($dateFormat) : '∞') . ' - ' > ($dateTo ? $dateTo->format($dateFormat) : '∞');
+            $dateRange = ($dateFrom ? $dateFrom->format($dateFormat) : '∞') . ' - ' . ($dateTo ? $dateTo->format($dateFormat) : '∞');
+
             $dateRange = !$dateFrom && !$dateTo ? '∞' : $dateRange;
 
             $tableData[] = [

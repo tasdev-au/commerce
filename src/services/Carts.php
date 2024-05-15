@@ -189,7 +189,6 @@ class Carts extends Component
 
     /**
      * @since 3.1
-     * @deprecated in 4.0.0. The cookie name is available via [[$cartCookie]] `['name']`.
      */
     public function getCartName(): string
     {

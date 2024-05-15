@@ -169,7 +169,9 @@ class Install extends Migration
             'hasFreeShippingForMatchingItems' => $this->boolean()->notNull()->defaultValue(false),
             'hasFreeShippingForOrder' => $this->boolean()->notNull()->defaultValue(false),
             'allPurchasables' => $this->boolean()->notNull()->defaultValue(false),
+            'purchasableIds' => $this->text(),
             'allCategories' => $this->boolean()->notNull()->defaultValue(false),
+            'categoryIds' => $this->text(),
             'appliedTo' => $this->enum('appliedTo', ['matchingLineItems', 'allLineItems'])->notNull()->defaultValue('matchingLineItems'),
             'categoryRelationshipType' => $this->enum('categoryRelationshipType', ['element', 'sourceElement', 'targetElement'])->notNull()->defaultValue('element'),
             'orderConditionFormula' => $this->text(),
@@ -621,7 +623,6 @@ class Install extends Migration
             'name' => $this->string()->notNull(),
             'handle' => $this->string()->notNull(),
             'enabled' => $this->boolean()->notNull()->defaultValue(true),
-            'isLite' => $this->boolean()->notNull()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
@@ -664,7 +665,6 @@ class Install extends Migration
             'percentageRate' => $this->decimal(14, 4)->notNull()->defaultValue(0),
             'minRate' => $this->decimal(14, 4)->notNull()->defaultValue(0),
             'maxRate' => $this->decimal(14, 4)->notNull()->defaultValue(0),
-            'isLite' => $this->boolean()->notNull()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
@@ -743,7 +743,6 @@ class Install extends Migration
             'removeIncluded' => $this->boolean()->notNull()->defaultValue(false),
             'removeVatIncluded' => $this->boolean()->notNull()->defaultValue(false),
             'taxable' => $this->enum('taxable', ['purchasable', 'price', 'shipping', 'price_shipping', 'order_total_shipping', 'order_total_price'])->notNull(),
-            'isLite' => $this->boolean()->notNull()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
@@ -923,6 +922,7 @@ class Install extends Migration
         $this->createIndex(null, Table::TRANSACTIONS, 'gatewayId', false);
         $this->createIndex(null, Table::TRANSACTIONS, 'orderId', false);
         $this->createIndex(null, Table::TRANSACTIONS, 'userId', false);
+        $this->createIndex(null, Table::TRANSACTIONS, 'hash', false);
         $this->createIndex(null, Table::VARIANTS, 'sku', false);
         $this->createIndex(null, Table::VARIANTS, 'productId', false);
     }
